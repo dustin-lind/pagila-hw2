@@ -10,3 +10,19 @@
  * This can be solved either with a LEFT JOIN or with the NOT IN operator.
  * You may choose whichever solution makes the most sense to you.
  */
+-- create query that finds the customers who live live in US
+
+SELECT DISTINCT(title)
+FROM film f
+JOIN inventory i USING(film_id)
+WHERE f.film_id NOT IN (
+    SELECT film_id
+    FROM inventory i
+    JOIN rental r ON(i.inventory_id = r.inventory_id)
+    JOIN customer cu ON(r.customer_id = cu.customer_id)
+    JOIN address a ON(cu.address_id = a.address_id)
+    JOIN city ci ON(a.city_id = ci.city_id)
+    JOIN country co ON(ci.country_id = co.country_id)
+    WHERE country = 'United States'
+)
+ORDER BY title;
